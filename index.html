@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer with Notifications</title>
+    <title>Countdown Timer with Beep and Notification</title>
 </head>
 <body>
-    <h1>Countdown Timer with Notifications</h1>
+    <h1>Countdown Timer</h1>
     <button id="saveButton">Save Table State</button>
     <table border="1">
         <tr>
@@ -15,34 +15,18 @@
                 <button class="startButton">L-Pocket</button>
                 <div class="timerDisplay">00:00</div>
             </td>
-            <!-- Additional rows omitted for brevity -->
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
         </tr>
     </table>
 
-    <!-- Hidden audio element for beep sound -->
+    <!-- Audio element for beep sound -->
     <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let currentCountdown = null;
-        let audioContext = null; // Declare audioContext at the top
-
-        // Request permission for push notifications
-        if ("Notification" in window && "serviceWorker" in navigator) {
-            Notification.requestPermission().then(function(permission) {
-                if (permission === "granted") {
-                    console.log("Notification permission granted.");
-                }
-            });
-        }
-
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
-            }).catch(function(error) {
-                console.log('Service Worker registration failed:', error);
-            });
-        }
 
         // Start the countdown
         function startCountdown(button, display, duration) {
@@ -73,37 +57,28 @@
             }, 1000);
         }
 
-        // Play beep sound and trigger push notification
+        // Play beep sound
         function playBeep() {
-            // Play beep sound using AudioContext
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            // Play beep sound using the <audio> element
+            const beepSound = document.getElementById("beepSound");
+            beepSound.play();
 
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Frequency in Hz
-            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5); // Beep duration in seconds
-
-            // Trigger push notification
+            // Trigger a notification (in the foreground)
             if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(function(registration) {
-                    registration.showNotification("Countdown Finished!", {
-                        body: "The timer has ended.",
-                        icon: "/icon.png", // Customize with your app icon
-                    });
-                }).catch(function(error) {
-                    console.log("Error displaying notification:", error);
+                new Notification("Countdown Finished!", {
+                    body: "The timer has ended.",
+                    icon: "/icon.png" // Customize with your app icon
                 });
             }
+        }
+
+        // Request notification permission if not already granted
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") {
+                    console.log("Notification permission granted.");
+                }
+            });
         }
 
         // Attach event listener to each button
