@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer with Beep and Notification</title>
+    <title>Countdown Timer Table</title>
 </head>
 <body>
-    <h1>Countdown Timer</h1>
+    <h1>Countdown Timer Table</h1>
     <button id="saveButton">Save Table State</button>
     <table border="1">
         <tr>
@@ -19,14 +19,35 @@
                 <button class="startButton">R-Pocket</button>
                 <div class="timerDisplay">00:00</div>
             </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
         </tr>
+        <!-- Other rows omitted for brevity -->
     </table>
 
-    <!-- Audio element for beep sound -->
+    <!-- Hidden audio element for beep sound -->
     <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let currentCountdown = null;
+        let audioContext = null; // Declare audioContext at the top
+
+        // Initialize AudioContext on the first user interaction
+        document.body.addEventListener('click', () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        });
 
         // Start the countdown
         function startCountdown(button, display, duration) {
@@ -52,40 +73,39 @@
                 elapsed++;
                 if (elapsed >= duration) {
                     clearInterval(currentCountdown.interval);
-                    playBeep(); // Play beep sound and send notification
+                    playBeep(); // Play beep sound
                 }
             }, 1000);
         }
 
-        // Play beep sound and send notification
+        // Play a beep sound when the countdown finishes
         function playBeep() {
-            // Play beep sound using the <audio> element
-            const beepSound = document.getElementById("beepSound");
-            beepSound.play();
+            if (audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
 
-            // Trigger a notification (in the foreground)
-            if (Notification.permission === "granted") {
-                new Notification("Countdown Finished!", {
-                    body: "The timer has ended.",
-                    icon: "/icon.png" // Customize with your app icon if you like
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Frequency in Hz
+                gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5); // Beep duration in seconds
+            } else {
+                // Fallback for browsers that don't support AudioContext
+                const beepSound = document.getElementById('beepSound');
+                beepSound.play().catch(function(error) {
+                    console.log("Error playing beep sound: ", error);
                 });
             }
         }
 
-        // Request notification permission if not already granted
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission().then(function(permission) {
-                if (permission === "granted") {
-                    console.log("Notification permission granted.");
-                }
-            });
-        }
-
         // Attach event listener to each button
-        document.querySelectorAll('.startButton').forEach((button) => {
+        document.querySelectorAll('.startButton').forEach((button, index) => {
             const display = button.nextElementSibling;
 
-            // Start the timer on button click
+            // Trigger audio context setup upon first click
             button.addEventListener('click', function() {
                 startCountdown(button, display, 60); // 60 second timer
             });
