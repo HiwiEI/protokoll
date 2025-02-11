@@ -32,11 +32,11 @@
                 <div class="timerDisplay">00:00</div>
             </td>
         </tr>
-        <!-- Other rows omitted for brevity -->
+        <!-- Additional rows omitted for brevity -->
     </table>
 
     <!-- Hidden audio element for beep sound -->
-    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    <audio id="beepSound" src="https://www.soundjay.com/buttons/sounds/button-1.mp3" preload="auto"></audio>
 
     <script>
         let currentCountdown = null;
@@ -65,7 +65,7 @@
                 elapsed++;
                 if (elapsed >= duration) {
                     clearInterval(currentCountdown.interval);
-                    playBeep(); // Play beep sound
+                    setTimeout(playBeep, 500); // Delay the beep slightly to ensure it's triggered properly
                 }
             }, 1000);
         }
