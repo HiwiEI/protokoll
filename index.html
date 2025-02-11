@@ -32,11 +32,11 @@
                 <div class="timerDisplay">00:00</div>
             </td>
         </tr>
-        <!-- Add the rest of your rows here... -->
+        <!-- Other rows omitted for brevity -->
     </table>
 
     <!-- Hidden audio element for beep sound -->
-    <audio id="beepSound" src="https://www.soundjay.com/buttons/sounds/button-1.mp3" preload="auto"></audio>
+    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let currentCountdown = null;
@@ -73,7 +73,9 @@
         // Play a beep sound when the countdown finishes
         function playBeep() {
             const beepSound = document.getElementById('beepSound');
-            beepSound.play(); // Play the audio
+            beepSound.play().catch(function(error) {
+                console.log("Error playing beep sound: ", error);
+            });
         }
 
         // Attach event listener to each button
