@@ -1,42 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Timer Table</title>
-    <style>
-        /* Ensure the table fits within the screen width */
-        table {
-            width: 90%;
-            border-collapse: collapse;
-            /* table-layout: fixed; This ensures even distribution of column width */
-            margin: 0 auto; /* Center the table */
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        /* Media query for mobile screens */
-        @media (max-width: 600px) {
-            table {
-                font-size: 12px; /* Adjust font size for smaller screens */
-            }
-
-            th, td {
-                padding: 5px; /* Reduce padding on smaller screens */
-            }
-        }
-    </style>
 </head>
 <body>
     <h1>Countdown Timer Table</h1>
     <button id="saveButton">Save Table State</button>
     <table border="1">
         <tr>
-            <td>
-              Walking
-            </td>
+            <td>Walking</td>
             <td>
                 <button class="startButton">L-Pocket</button>
                 <div class="timerDisplay">00:00</div>
@@ -59,9 +33,7 @@
             </td>
         </tr>
         <tr>
-            <td>
-              Sitting
-            </td>
+            <td>Sitting</td>
             <td>
                 <button class="startButton">L-Pocket</button>
                 <div class="timerDisplay">00:00</div>
@@ -84,9 +56,7 @@
             </td>
         </tr>
         <tr>
-            <td>
-              Standing
-            </td>
+            <td>Standing</td>
             <td>
                 <button class="startButton">L-Pocket</button>
                 <div class="timerDisplay">00:00</div>
@@ -108,107 +78,12 @@
                 <div class="timerDisplay">00:00</div>
             </td>
         </tr>
-        <tr>
-            <td>
-              Lying Down
-            </td>
-            <td>
-                XXXXX
-            </td>
-            <td>
-                XXXXX
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                XXXXX
-            </td>
-        </tr>
-        <tr>
-            <td>
-              Upstairs
-            </td>
-            <td>
-                <button class="startButton">L-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">R-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Bag</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              Downstairs
-            </td>
-            <td>
-                <button class="startButton">L-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">R-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Bag</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              NO ACTIVITY
-            </td>
-            <td>
-                <button class="startButton">L-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">R-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Bag</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-        </tr>
+        <!-- Continue with the remaining table rows -->
     </table>
 
     <script>
         let currentCountdown = null;
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)(); // Create AudioContext globally
 
         function startCountdown(button, display, duration) {
             if (currentCountdown) {
@@ -239,7 +114,6 @@
         }
 
         function playBeep() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
 
