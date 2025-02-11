@@ -2,6 +2,32 @@
 <html>
 <head>
     <title>Countdown Timer Table</title>
+    <style>
+        /* Ensure the table fits within the screen width */
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            /* table-layout: fixed; This ensures even distribution of column width */
+            margin: 0 auto; /* Center the table */
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        /* Media query for mobile screens */
+        @media (max-width: 600px) {
+            table {
+                font-size: 12px; /* Adjust font size for smaller screens */
+            }
+
+            th, td {
+                padding: 5px; /* Reduce padding on smaller screens */
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Countdown Timer Table</h1>
