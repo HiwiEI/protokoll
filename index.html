@@ -32,14 +32,22 @@
                 <div class="timerDisplay">00:00</div>
             </td>
         </tr>
-        <!-- Additional rows omitted for brevity -->
+        <!-- Other rows omitted for brevity -->
     </table>
 
     <!-- Hidden audio element for beep sound -->
-    <audio id="beepSound" src="https://www.soundjay.com/buttons/sounds/button-1.mp3" preload="auto"></audio>
+    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
     <script>
         let currentCountdown = null;
+        let audioContext = null; // Declare audioContext at the top
+
+        // Initialize AudioContext on the first user interaction
+        document.body.addEventListener('click', () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        });
 
         // Start the countdown
         function startCountdown(button, display, duration) {
@@ -65,17 +73,32 @@
                 elapsed++;
                 if (elapsed >= duration) {
                     clearInterval(currentCountdown.interval);
-                    setTimeout(playBeep, 500); // Delay the beep slightly to ensure it's triggered properly
+                    playBeep(); // Play beep sound
                 }
             }, 1000);
         }
 
         // Play a beep sound when the countdown finishes
         function playBeep() {
-            const beepSound = document.getElementById('beepSound');
-            beepSound.play().catch(function(error) {
-                console.log("Error playing beep sound: ", error);
-            });
+            if (audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Frequency in Hz
+                gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5); // Beep duration in seconds
+            } else {
+                // Fallback for browsers that don't support AudioContext
+                const beepSound = document.getElementById('beepSound');
+                beepSound.play().catch(function(error) {
+                    console.log("Error playing beep sound: ", error);
+                });
+            }
         }
 
         // Attach event listener to each button
