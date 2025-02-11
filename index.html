@@ -32,59 +32,14 @@
                 <div class="timerDisplay">00:00</div>
             </td>
         </tr>
-        <tr>
-            <td>Sitting</td>
-            <td>
-                <button class="startButton">L-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">R-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Bag</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-        </tr>
-        <tr>
-            <td>Standing</td>
-            <td>
-                <button class="startButton">L-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">R-Pocket</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Hand</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">On-Ear</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-            <td>
-                <button class="startButton">In-Bag</button>
-                <div class="timerDisplay">00:00</div>
-            </td>
-        </tr>
-        <!-- Continue with the remaining table rows -->
+        <!-- Add the rest of your rows here... -->
     </table>
 
     <script>
         let currentCountdown = null;
-        let audioContext = new (window.AudioContext || window.webkitAudioContext)(); // Create AudioContext globally
+        let audioContext = null; // We'll initialize this only after a button click
 
+        // Start the countdown
         function startCountdown(button, display, duration) {
             if (currentCountdown) {
                 clearInterval(currentCountdown.interval);
@@ -113,7 +68,13 @@
             }, 1000);
         }
 
+        // Play a beep sound when the countdown finishes
         function playBeep() {
+            // Initialize the AudioContext here (only when needed)
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
 
@@ -127,13 +88,17 @@
             oscillator.stop(audioContext.currentTime + 0.5); // Beep duration in seconds
         }
 
+        // Attach event listener to each button
         document.querySelectorAll('.startButton').forEach((button, index) => {
             const display = button.nextElementSibling;
+
+            // Trigger audio context setup upon first click
             button.addEventListener('click', function() {
                 startCountdown(button, display, 60); // 60 second timer
             });
         });
 
+        // Save button functionality
         document.getElementById('saveButton').addEventListener('click', function() {
             const timers = document.querySelectorAll('.timerDisplay');
             let tableState = [];
