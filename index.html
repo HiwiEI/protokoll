@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Countdown Timer Table</title>
+</head>
+<body>
+    <h1>Countdown Timer Table</h1>
+    <button id="saveButton">Save Table State</button>
+    <table border="1">
+        <tr>
+            <td>
+              Walking
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              Sitting
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              Standing
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              Lying Down
+            </td>
+            <td>
+                XXXXX
+            </td>
+            <td>
+                XXXXX
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                XXXXX
+            </td>
+        </tr>
+        <tr>
+            <td>
+              Upstairs
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              Downstairs
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              NO ACTIVITY
+            </td>
+            <td>
+                <button class="startButton">L-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">R-Pocket</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Hand</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">On-Ear</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+            <td>
+                <button class="startButton">In-Bag</button>
+                <div class="timerDisplay">00:00</div>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        let currentCountdown = null;
+
+        function startCountdown(button, display, duration) {
+            if (currentCountdown) {
+                clearInterval(currentCountdown.interval);
+            }
+
+            let elapsed = display.getAttribute('data-time') ? parseInt(display.getAttribute('data-time')) : 0;
+            let minutes, seconds;
+
+            currentCountdown = { interval: null, display: display, remaining: duration - elapsed };
+
+            currentCountdown.interval = setInterval(function () {
+                minutes = parseInt(elapsed / 60, 10);
+                seconds = parseInt(elapsed % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+                display.setAttribute('data-time', elapsed);
+
+                elapsed++;
+                if (elapsed >= duration) {
+                    clearInterval(currentCountdown.interval);
+                    playBeep(); // Play beep sound
+                }
+            }, 1000);
+        }
+
+        function playBeep() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Frequency in Hz
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5); // Beep duration in seconds
+        }
+
+        document.querySelectorAll('.startButton').forEach((button, index) => {
+            const display = button.nextElementSibling;
+            button.addEventListener('click', function() {
+                startCountdown(button, display, 60); // 60 second timer
+            });
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const timers = document.querySelectorAll('.timerDisplay');
+            let tableState = [];
+
+            timers.forEach(timer => {
+                tableState.push({
+                    id: timer.previousElementSibling.textContent,
+                    time: timer.textContent
+                });
+            });
+
+            const blob = new Blob([JSON.stringify(tableState, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'table_state.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
