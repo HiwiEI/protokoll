@@ -57,7 +57,7 @@
             }, 1000);
         }
 
-        // Play beep sound
+        // Play beep sound and send notification
         function playBeep() {
             // Play beep sound using the <audio> element
             const beepSound = document.getElementById("beepSound");
@@ -67,7 +67,7 @@
             if (Notification.permission === "granted") {
                 new Notification("Countdown Finished!", {
                     body: "The timer has ended.",
-                    icon: "/icon.png" // Customize with your app icon
+                    icon: "/icon.png" // Customize with your app icon if you like
                 });
             }
         }
@@ -82,10 +82,10 @@
         }
 
         // Attach event listener to each button
-        document.querySelectorAll('.startButton').forEach((button, index) => {
+        document.querySelectorAll('.startButton').forEach((button) => {
             const display = button.nextElementSibling;
 
-            // Trigger audio context setup upon first click
+            // Start the timer on button click
             button.addEventListener('click', function() {
                 startCountdown(button, display, 60); // 60 second timer
             });
