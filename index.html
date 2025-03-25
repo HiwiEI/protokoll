@@ -71,6 +71,7 @@
         let currentCountdown = null;
         let activeButton = null; // The most recently clicked button (green button)
         let ongoingButton = null; // The button with the ongoing timer (light blue button)
+        let clickSequence = 1; // Initialize sequence number for clicks
 
         // Start Countdown and set button colors
         function startCountdown(button, display, duration) {
@@ -153,8 +154,32 @@
         // Add event listeners to each start button
         document.querySelectorAll('.startButton').forEach((button) => {
             const display = button.nextElementSibling;
+            const rowName = button.closest('tr').cells[0].textContent; // Get the row name
+
             button.addEventListener('click', function () {
                 startCountdown(button, display, 60); // 60-second timer
+
+                // Create a timestamp and activity (row name)
+                const timestamp = new Date().toISOString();
+                const activity = rowName; // The row name
+                const buttonName = button.textContent; // The button name
+
+                // Store the click data in a global array
+                if (!window.clicks) {
+                    window.clicks = [];
+                }
+
+                const clickData = {
+                    buttonName: buttonName, // Button label
+                    timestamp: timestamp,   // Time of click
+                    activity: activity,     // Row name
+                    sequence: clickSequence++ // Sequence of click
+                };
+
+                // Add click data to array
+                window.clicks.push(clickData);
+
+                console.log(clickData); // Logging the click data
             });
         });
 
@@ -165,9 +190,14 @@
 
             timers.forEach(timer => {
                 tableState.push({
-                    id: timer.previousElementSibling.textContent,
+                    buttonName: timer.previousElementSibling.textContent,
                     time: timer.textContent
                 });
+            });
+
+            // Include the clicks data in the saved JSON
+            tableState.push({
+                clicks: window.clicks
             });
 
             const blob = new Blob([JSON.stringify(tableState, null, 2)], { type: 'application/json' });
